@@ -84,8 +84,8 @@
   <title>Комментарии | Провайдер</title>
 </svelte:head>
 
-<div class="max-w-2xl mx-auto p-4 border rounded shadow mt-6">
-  <button on:click={goBack} class="mb-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded">
+<div class="max-w-2xl mx-auto p-4 rounded shadow mt-6">
+  <button on:click={goBack} class="mb-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded">
     &larr; Назад
   </button>
   <h2 class="text-xl font-bold mb-4">Комментарии к заявке #{orderId}</h2>

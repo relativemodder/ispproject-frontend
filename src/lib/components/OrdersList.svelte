@@ -7,7 +7,7 @@
   import InstallerForm from './InstallerForm.svelte';
   import { API_BASE } from '$lib/constants';
   import { user } from '$lib/stores/user';
-  
+  import Icon from "@iconify/svelte";
   
   
   interface Order {
@@ -288,21 +288,28 @@
   
 </script>
 
-<div class="max-w-6xl mx-auto mt-10 p-6 border rounded shadow">
+<div class="max-w-6xl mx-auto mt-10 p-6 rounded shadow">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Заявки</h2>
     <div>
       {#if $user.role !== 'Монтажник'}
       <button on:click={() => showCreateForm = !showCreateForm} class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mr-2">
-        {showCreateForm ? 'Отменить' : 'Создать заявку'}
+        {showCreateForm ? 'Отменить' : '+ Создать заявку'}
       </button>
 
       <button on:click={navigateToInstallers} class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2">
         К списку монтажников
       </button>
+
+      {#if $user.role === 'Администратор'}
+      <button on:click={() => goto('/users')} class="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 mr-2">
+        К пользователям
+      </button>
       {/if}
 
-      <button on:click={logout} class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Выйти</button>
+      {/if}
+
+      <button on:click={logout} class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">&lt;- Выйти</button>
     </div>
   </div>
 

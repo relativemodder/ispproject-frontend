@@ -4,22 +4,10 @@
 	import { API_BASE } from '$lib/constants';
     import { onMount } from 'svelte';
 	import { user } from '$lib/stores/user';
+    import { getStatusName } from '$lib';
 
 	let username = $state("Username");
 	let role = $state("Role");
-
-	function getStatusName(status: string): string {
-		if (status === 'administrator') {
-			return 'Администратор';
-		}
-		if (status === 'dispatcher') {
-			return 'Диспетчер';
-		}
-		if (status === 'installer') {
-			return 'Монтажник';
-		}
-		return 'Неизвестно';
-	}
 
 	async function fetchMe(token: string) {
 		if (token === 'nothing') {

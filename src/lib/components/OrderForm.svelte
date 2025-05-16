@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { user } from '$lib/stores/user';
+  import { user } from '$lib/stores/user';
   import { createEventDispatcher, onMount } from 'svelte';
+  import Icon from "@iconify/svelte";
 
   export let initialData: {
     address?: string;
@@ -47,7 +48,7 @@
   $: is_installer = $user.role == 'Монтажник';
 </script>
 
-<div class="max-w-md mx-auto p-4 border rounded shadow mb-4">
+<div class="max-w-md mx-auto p-4 rounded shadow mb-4">
   <h3 class="text-lg font-bold mb-4">
     {mode === 'create' ? 'Создать заявку' : 'Редактировать заявку'}
   </h3>
@@ -111,7 +112,8 @@
         <option value="completed">Завершена</option>
       </select>
     </div>
-    <button type="submit" class="bg-green-600 text-white w-full px-4 py-2 rounded hover:bg-success-light" disabled={loading}>
+    <button type="submit" class="bg-green-600 text-white w-full px-4 py-2 rounded flex items-center justify-center gap-3 hover:bg-success-light" disabled={loading}>
+      <Icon icon="material-symbols:save" height="20" />
       {#if loading}
         {mode === 'create' ? 'Создание...' : 'Сохранение...'}
       {:else}

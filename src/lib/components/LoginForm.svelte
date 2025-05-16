@@ -31,7 +31,7 @@
   }
 </script>
 
-<div class="max-w-sm mx-auto mt-10 p-6 border rounded shadow">
+<div class="max-w-sm mx-auto mt-10 p-6 rounded shadow">
   <h2 class="text-xl font-bold mb-4">Войти</h2>
   {#if error}
     <p class="text-red-600 mb-4">{error}</p>

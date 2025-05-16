@@ -30,7 +30,7 @@
   }
 </script>
 
-<div class="max-w-md mx-auto p-4 border rounded shadow mb-4">
+<div class="max-w-md mx-auto p-4 rounded shadow mb-4">
   <h3 class="text-lg font-bold mb-4">Создать монтажника</h3>
   {#if error}
     <p class="text-red-600 mb-2">{error}</p>

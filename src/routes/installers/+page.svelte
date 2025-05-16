@@ -181,15 +181,15 @@
   <title>Монтажники | Провайдер</title>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto mt-10 p-6 border rounded shadow">
+<div class="max-w-4xl mx-auto mt-10 p-6 rounded shadow">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Монтажники</h2>
     <div>
       <button on:click={() => { showCreateForm = !showCreateForm; showEditForm = false; }} class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mr-2">
-        {showCreateForm ? 'Отменить' : 'Создать монтажника'}
+        {showCreateForm ? 'Отменить' : '+ Создать монтажника'}
       </button>
       <button on:click={() => goto('/')} class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 ml-2">
-        К заявкам
+        &lt;- К заявкам
       </button>
     </div>
   </div>
