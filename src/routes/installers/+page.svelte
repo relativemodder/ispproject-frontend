@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { auth } from '$lib/stores/auth';
   import InstallerForm from '$lib/components/InstallerForm.svelte';
-  import { writable } from 'svelte/store';
+  import { writable, type Writable } from 'svelte/store';
   import { goto } from '$app/navigation';
   import { API_BASE } from '$lib/constants';
 
@@ -10,6 +10,13 @@
     id: number;
     name: string;
     contact_info?: string | null;
+    user?: User | null;
+  }
+
+  interface User {
+    id: number;
+    username: string;
+    email: string;
   }
 
   let token: string | null = null;
@@ -17,7 +24,8 @@
     token = value;
   });
 
-  let installers = writable<Installer[]>([]);
+  let installers: Writable<Installer[]> = writable([]);
+  let users: Writable<User[]> = writable([]);
   let error = '';
   let loading = false;
   let showCreateForm = false;
@@ -47,6 +55,25 @@
       error = 'Network error';
     } finally {
       loading = false;
+    }
+  }
+
+  async function fetchUsers() {
+    if (!token) return;
+    try {
+      const response = await fetch(`${API_BASE}/users/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        }
+      });
+      if (!response.ok) {
+        return;
+      }
+      const data = await response.json();
+      users.set(data);
+    } catch (e) {
+      // ignore errors for users fetch
     }
   }
 
@@ -146,6 +173,7 @@
 
   onMount(() => {
     fetchInstallers();
+    fetchUsers();
   });
 </script>
 
@@ -170,14 +198,14 @@
     {#if error}
       <p class="text-red-600 mb-2">{error}</p>
     {/if}
-    <InstallerForm on:submit={createInstaller} />
+    <InstallerForm users={$users} on:submit={createInstaller} />
   {/if}
 
   {#if showEditForm && installerToEdit}
     {#if error}
       <p class="text-red-600 mb-2">{error}</p>
     {/if}
-    <InstallerForm on:submit={updateInstaller} on:cancel={cancelEdit} />
+    <InstallerForm users={$users} on:submit={updateInstaller} on:cancel={cancelEdit} />
   {/if}
 
   {#if loading}
@@ -191,6 +219,7 @@
           <th class="border border-gray-300 px-2 py-1">ID</th>
           <th class="border border-gray-300 px-2 py-1">Имя</th>
           <th class="border border-gray-300 px-2 py-1">Контактная информация</th>
+          <th class="border border-gray-300 px-2 py-1">Пользователь</th>
         </tr>
       </thead>
       <tbody>
@@ -199,6 +228,7 @@
             <td class="border border-gray-300 px-2 py-1">{installer.id}</td>
             <td class="border border-gray-300 px-2 py-1">{installer.name}</td>
             <td class="border border-gray-300 px-2 py-1">{installer.contact_info || '-'}</td>
+            <td class="border border-gray-300 px-2 py-1">{installer.user ? installer.user.username : '-'}</td>
           </tr>
         {/each}
       </tbody>

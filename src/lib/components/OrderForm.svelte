@@ -67,7 +67,7 @@
     <div>
       <label for="installer" class="block mb-1">Назначить монтажника</label>
       <select id="installer" bind:value={installer_id} class="w-full border rounded px-3 py-2">
-        <option value={null}>-- Select Installer --</option>
+        <option value={null}>-- Монтажник не выбран --</option>
         {#each users as user}
           <option value={user.id}>{user.name}</option>
         {/each}
