@@ -3,6 +3,7 @@
 	import { auth } from '$lib/stores/auth';
 	import { API_BASE } from '$lib/constants';
     import { onMount } from 'svelte';
+	import { user } from '$lib/stores/user';
 
 	let username = $state("Username");
 	let role = $state("Role");
@@ -24,6 +25,7 @@
 		if (token === 'nothing') {
 			username = '';
 			role = '';
+			user.set({ username: '', role: '' });
 			return;
 		}
 
@@ -37,28 +39,26 @@
 
 		username = result['username'];
 		role = getStatusName(result['role']);
+		user.set({ username, role });
 	}
+
+	auth.subscribe((token) => {
+		fetchMe(token || 'nothing');
+	});
 	
 	let { children } = $props();
 
 	onMount(() => {
 		fetchMe($auth || 'nothing');
-
-		const refreshedInfo = setInterval(() => {
-			fetchMe($auth || 'nothing');
-		}, 3000);
-
-		return () => {
-			clearInterval(refreshedInfo);
-		}
 	});
+	
 	
 
 </script>
 
 <div class="w-full flex flex-col gap-2 items-end justify-end mt-10 pr-28">
-	<h1 class="text-2xl">{username}</h1>
-	<h2>{role}</h2>
+	<h1 class="text-2xl uppercase font-semibold">{$user.username}</h1>
+	<h2>{$user.role}</h2>
 </div>
 
 {@render children()}

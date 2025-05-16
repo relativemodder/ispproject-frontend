@@ -6,6 +6,8 @@
   import OrderForm from './OrderForm.svelte';
   import InstallerForm from './InstallerForm.svelte';
   import { API_BASE } from '$lib/constants';
+  import { user } from '$lib/stores/user';
+  
   
   
   interface Order {
@@ -35,8 +37,16 @@
   let orderToEdit: Order | null = null;
 
   let token: string | null = null;
-  const unsubscribe = auth.subscribe(value => {
+  let role: string = '';
+
+  const unsubscribeAuth = auth.subscribe(value => {
     token = value;
+    fetchOrders();
+  });
+
+  const unsubscribeUser = user.subscribe(value => {
+    role = value.role;
+    fetchOrders();
   });
 
   async function fetchOrders() {
@@ -44,7 +54,14 @@
     loading = true;
     error = '';
     try {
-      const response = await fetch(`${API_BASE}/orders/`, {
+      console.log("Role:", role);
+
+      if (!role) {
+        return;
+      }
+
+      const endpoint = role === 'Монтажник' ? `${API_BASE}/orders/my` : `${API_BASE}/orders/`;
+      const response = await fetch(endpoint, {
         headers: {
           'Content-Type': 'application/json',
           'token': token
@@ -135,36 +152,39 @@
     error = '';
     loading = true;
     try {
-      const response = await fetch(`${API_BASE}/orders/${orderToEdit.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token
-        },
-        body: JSON.stringify(event.detail)
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        error = data.detail || 'Failed to update order';
-        loading = false;
-        return;
-      }
-      if (event.detail.installer_id !== orderToEdit.installer_id) {
-        const assignResponse = await fetch(`${API_BASE}/orders/${orderToEdit.id}/assign_installer`, {
-          method: 'POST',
+      if ($user.role !== 'Монтажник') {
+        const response = await fetch(`${API_BASE}/orders/${orderToEdit.id}`, {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'token': token
           },
-          body: JSON.stringify({ installer_id: event.detail.installer_id })
+          body: JSON.stringify(event.detail)
         });
-        if (!assignResponse.ok) {
-          const assignData = await assignResponse.json();
-          error = assignData.detail || 'Failed to assign installer';
+        if (!response.ok) {
+          const data = await response.json();
+          error = data.detail || 'Failed to update order';
           loading = false;
           return;
         }
+        if (event.detail.installer_id !== orderToEdit.installer_id) {
+          const assignResponse = await fetch(`${API_BASE}/orders/${orderToEdit.id}/assign_installer`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': token
+            },
+            body: JSON.stringify({ installer_id: event.detail.installer_id })
+          });
+          if (!assignResponse.ok) {
+            const assignData = await assignResponse.json();
+            error = assignData.detail || 'Failed to assign installer';
+            loading = false;
+            return;
+          }
+        }
       }
+      
       if (event.detail.status && event.detail.status !== orderToEdit.status) {
         const statusResponse = await fetch(`${API_BASE}/orders/${orderToEdit.id}/change_status`, {
           method: 'POST',
@@ -255,6 +275,16 @@
     }
     return 'Неизвестно';
   }
+
+  // Helper function to convert UTC date string to local Date object
+  function utcToLocalDate(utcDateString: string): Date {
+    // Parse the UTC date string as a Date object
+    // If the string does not end with 'Z', append it to indicate UTC
+    if (!utcDateString.endsWith('Z')) {
+      utcDateString += 'Z';
+    }
+    return new Date(utcDateString);
+  }
   
 </script>
 
@@ -262,6 +292,7 @@
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Заявки</h2>
     <div>
+      {#if $user.role !== 'Монтажник'}
       <button on:click={() => showCreateForm = !showCreateForm} class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mr-2">
         {showCreateForm ? 'Отменить' : 'Создать заявку'}
       </button>
@@ -269,6 +300,7 @@
       <button on:click={navigateToInstallers} class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2">
         К списку монтажников
       </button>
+      {/if}
 
       <button on:click={logout} class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Выйти</button>
     </div>
@@ -329,8 +361,8 @@
                   -
                 {/if}
               </td>
-              <td class="border border-gray-300 px-2 py-1">{new Date(order.created_at).toLocaleString()}</td>
-              <td class="border border-gray-300 px-2 py-1">{new Date(order.updated_at).toLocaleString()}</td>
+              <td class="border border-gray-300 px-2 py-1">{utcToLocalDate(order.created_at).toLocaleString()}</td>
+              <td class="border border-gray-300 px-2 py-1">{utcToLocalDate(order.updated_at).toLocaleString()}</td>
                 <td class="border border-gray-300 px-2 py-1">
                   <button on:click={() => startEdit(order)} class="w-full mt-2 bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 mr-2">
                     Редактировать
