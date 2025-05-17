@@ -48,7 +48,7 @@
   $: is_installer = $user.role == 'Монтажник';
 </script>
 
-<div class="max-w-md mx-auto p-4 rounded shadow mb-4">
+<div class="max-w-md mx-auto p-4 rounded shadow mb-4 bg-white">
   <h3 class="text-lg font-bold mb-4">
     {mode === 'create' ? 'Создать заявку' : 'Редактировать заявку'}
   </h3>

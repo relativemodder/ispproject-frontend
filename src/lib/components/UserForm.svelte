@@ -15,7 +15,7 @@
   }
 </script>
 
-<form on:submit|preventDefault={submitForm} class="max-w-md mx-auto p-8 shadow border-gray-500 rounded">
+<form on:submit|preventDefault={submitForm} class="max-w-md mx-auto p-8 shadow border-gray-500 bg-white rounded">
   <div class="mb-4">
     <label for="username" class="block mb-1 font-semibold">Логин</label>
     <input id="username" type="text" bind:value={username} required class="w-full border px-2 py-1 rounded" />

@@ -3,3 +3,11 @@
 * {
     font-family: 'Inter';
 }
+
+body {
+    @apply bg-gray-50;
+}
+
+button {
+    @apply transition-all;
+}

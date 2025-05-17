@@ -288,7 +288,7 @@
   
 </script>
 
-<div class="max-w-6xl mx-auto mt-10 p-6 rounded shadow">
+<div class="max-w-6xl mx-auto mt-10 p-6 rounded shadow mb-5">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Заявки</h2>
     <div>
@@ -297,12 +297,12 @@
         {showCreateForm ? 'Отменить' : '+ Создать заявку'}
       </button>
 
-      <button on:click={navigateToInstallers} class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2">
+      <button on:click={navigateToInstallers} class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 mr-2">
         К списку монтажников
       </button>
 
       {#if $user.role === 'Администратор'}
-      <button on:click={() => goto('/users')} class="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 mr-2">
+      <button on:click={() => goto('/users')} class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500 mr-2">
         К пользователям
       </button>
       {/if}
@@ -375,7 +375,7 @@
                     <Icon icon="material-symbols:edit" width="16" height="16" />
                     Изменить
                   </button>
-                  <button on:click={() => goto(`/orders/${order.id}/comments`)} class="w-full my-2 bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">
+                  <button on:click={() => goto(`/orders/${order.id}/comments`)} class="w-full my-2 bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500">
                     Комментарии
                   </button>
                 </td>

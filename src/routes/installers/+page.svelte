@@ -181,7 +181,7 @@
   <title>Монтажники | Провайдер</title>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto mt-10 p-6 rounded shadow">
+<div class="max-w-4xl mx-auto mt-10 p-6 rounded shadow bg-white mb-5">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Монтажники</h2>
     <div>

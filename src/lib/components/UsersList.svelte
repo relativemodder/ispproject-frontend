@@ -80,7 +80,7 @@
   });
 </script>
 
-<div class="max-w-6xl mx-auto mt-10 p-6 rounded shadow">
+<div class="max-w-6xl mx-auto mt-10 p-6 rounded shadow bg-white mb-5">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Пользователи</h2>
     <div>
@@ -119,10 +119,13 @@
                   -
                 {/if}
               </td>
-              <td class="border border-gray-300 px-2 py-1">
+              <td class="border border-gray-300 px-2 py-1 text-center">
+                -
+                <!--
                 <button disabled class="w-full mt-2 bg-yellow-500 text-white px-2 py-1 rounded opacity-50 cursor-not-allowed mr-2">
                   Редактировать
                 </button>
+                -->
               </td>
             </tr>
           {/each}
