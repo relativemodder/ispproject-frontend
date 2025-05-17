@@ -371,8 +371,9 @@
               <td class="border border-gray-300 px-2 py-1">{utcToLocalDate(order.created_at).toLocaleString()}</td>
               <td class="border border-gray-300 px-2 py-1">{utcToLocalDate(order.updated_at).toLocaleString()}</td>
                 <td class="border border-gray-300 px-2 py-1">
-                  <button on:click={() => startEdit(order)} class="w-full mt-2 bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 mr-2">
-                    Редактировать
+                  <button on:click={() => startEdit(order)} class="flex gap-2 items-center w-full mt-2 bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 mr-2">
+                    <Icon icon="material-symbols:edit" width="16" height="16" />
+                    Изменить
                   </button>
                   <button on:click={() => goto(`/orders/${order.id}/comments`)} class="w-full my-2 bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">
                     Комментарии

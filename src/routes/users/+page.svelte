@@ -1,9 +1,9 @@
 <script lang="ts">
   import UserForm from '$lib/components/UserForm.svelte';
   import UsersList from '$lib/components/UsersList.svelte';
+  import { API_BASE } from '$lib/constants';
   import { writable } from 'svelte/store';
 
-  const API_BASE = import.meta.env.VITE_API_BASE || '';
 
   const successMessage = writable('');
   const errorMessage = writable('');

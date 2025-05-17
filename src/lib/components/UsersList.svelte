@@ -80,7 +80,7 @@
   });
 </script>
 
-<div class="max-w-6xl mx-auto mt-10 p-6 border rounded shadow">
+<div class="max-w-6xl mx-auto mt-10 p-6 rounded shadow">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-bold">Пользователи</h2>
     <div>
