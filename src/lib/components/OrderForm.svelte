@@ -1,6 +1,6 @@
 <script lang="ts">
   import { user } from '$lib/stores/user';
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import Icon from "@iconify/svelte";
 
   export let initialData: {
@@ -15,34 +15,21 @@
 
   export let users: { id: number; name: string; contact_info?: string | null }[] = [];
 
-  let address = '';
-  let account_number = '';
-  let contact_details = '';
-  let installer_id: number | null = null;
-  let status = 'in_progress';
+  let address = initialData.address ?? '';
+  let account_number = initialData.account_number ?? '';
+  let contact_details = initialData.contact_details ?? '';
+  let installer_id: number | null = initialData.installer_id ?? null;
+  let status = initialData.status ?? 'in_progress';
   let error = '';
   let loading = false;
 
   const dispatch = createEventDispatcher();
 
-  onMount(() => {
-    address = initialData.address ?? '';
-    account_number = initialData.account_number ?? '';
-    contact_details = initialData.contact_details ?? '';
-    installer_id = initialData.installer_id ?? null;
-    status = initialData.status ?? 'in_progress';
-  });
-
-  async function handleSubmit() {
+  function handleSubmit() {
     error = '';
     loading = true;
-    try {
-      dispatch('submit', { address, account_number, contact_details, installer_id, status });
-    } catch (e) {
-      error = 'Failed to submit order';
-    } finally {
-      loading = false;
-    }
+    dispatch('submit', { address, account_number, contact_details, installer_id, status });
+    loading = false;
   }
 
   $: is_installer = $user.role == 'Монтажник';

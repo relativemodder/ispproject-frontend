@@ -1,11 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { auth } from '$lib/stores/auth';
-  import { writable } from 'svelte/store';
   import { goto } from '$app/navigation';
   import { API_BASE } from '$lib/constants';
   import { user } from '$lib/stores/user';
-    import { getStatusName } from '$lib';
+  import { getStatusName } from '$lib';
 
   interface Installer {
     id: number;
@@ -20,33 +19,29 @@
     installer?: Installer | null;
   }
 
-  let users = writable<User[]>([]);
+  let users: User[] = [];
   let error = '';
   let loading = false;
 
-  let token: string | null = null;
-  let role: string = '';
+  $: token = $auth;
+  $: role = $user.role;
 
-  const unsubscribeAuth = auth.subscribe(value => {
-    token = value;
+  $: if (token) {
     fetchUsers();
-  });
-
-  const unsubscribeUser = user.subscribe(value => {
-    role = value.role;
-    fetchUsers();
-  });
+  }
 
   async function fetchUsers() {
-    if (!token) return;
     loading = true;
     error = '';
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json'
+      };
+      if (token) {
+        headers['token'] = token;
+      }
       const response = await fetch(API_BASE + '/users/', {
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token
-        }
+        headers
       });
       if (!response.ok) {
         const data = await response.json();
@@ -55,7 +50,7 @@
         return;
       }
       const data = await response.json();
-      users.set(data);
+      users = data;
     } catch (e) {
       error = 'Network error';
     } finally {
@@ -65,10 +60,6 @@
 
   function logout() {
     auth.logout();
-  }
-
-  function startEdit(user: User) {
-    // Placeholder for edit functionality if needed later
   }
 
   function goBack() {
@@ -93,7 +84,7 @@
   {:else if error}
     <p class="text-red-600">{error}</p>
   {:else}
-    {#if $users.length === 0}
+{#if users.length === 0}
       <p>No users found.</p>
     {:else}
       <table class="w-full table-auto border-collapse border border-gray-300">
@@ -107,7 +98,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each $users as user}
+          {#each users as user}
             <tr>
               <td class="border border-gray-300 px-2 py-1">{user.id}</td>
               <td class="border border-gray-300 px-2 py-1">{user.username}</td>
